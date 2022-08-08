@@ -1,23 +1,74 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
-import Chart from '../components/chart';
-import GoogleMap from '../components/google_map';
+import { Chart } from '../components/chart';
+import { GoogleMap } from '../components/google_map';
 
-class WeatherList extends Component {
-    renderWeather(cityData) {
+type Weather = {
+    city: {
+        coord: { lat: number, lon: number },
+        country: string;
+        id: number;
+        name: string;
+        population: number;
+        sunrise: number;
+        sunset: number;
+        timezone: number;
+    },
+    cnt: number;
+    cod: string;
+    list: {
+        clouds: { all: number; };
+        dt: number;
+        dt_txt: string;
+        main: {
+            feels_like: number;
+            grnd_level: number;
+            humidity: number;
+            pressure: number;
+            sea_level: number;
+            temp: number;
+            temp_kf: number;
+            temp_max: number;
+            temp_min: number;
+        };
+        pop: number;
+        sys: { pod: string; };
+        visibility: number;
+        weather: {
+            description: string;
+            icon: string;
+            id: number;
+            main: string;
+        }[];
+        wind: {
+            speed: number;
+            deg: number;
+            gust: number;
+        };
+    }[];
+    message : number;
+}
+
+type Props = {
+    weather: Weather[]
+};
+
+class WeatherList extends Component<Props> {
+    renderWeather(cityData: Weather) {
         const NAME = cityData.city.name;
         const TEMPSk = cityData.list.map((weather) => weather.main.temp);
         const TEMPSf = _.map(TEMPSk, (temp) => (temp * 9) / 5 - 459.67);
         const HUMIDITY = cityData.list.map((weather) => weather.main.humidity);
         const PRESSURE = cityData.list.map((weather) => weather.main.pressure);
 
-        const { lon, lat } = cityData.city.coord;
+        const { lat, lon  } = cityData.city.coord;
 
         return (
             <tr key={NAME}>
                 <td>
-                    <GoogleMap lon={lon} lat={lat} />
+                    <GoogleMap lat={lat} lon={lon} />
                 </td>
                 <td>
                     <Chart data={TEMPSf} color="red" units="ºF" />
@@ -49,7 +100,9 @@ class WeatherList extends Component {
     }
 }
 
-function mapStateToProps({ weather }) {
+function mapStateToProps(state: Props) {
+    const { weather } = state;
+
     return { weather };
 }
 

@@ -6,11 +6,17 @@ import {
 } from 'react-sparklines';
 import _ from 'lodash';
 
-function average(data) {
+function average(data: number[]) {
     return _.round(_.sum(data) / data.length);
 }
 
-export default (props) => {
+type Props = {
+    color: string;
+    data: number[];
+    units: string;
+};
+
+export function Chart(props: Props) {
     return (
         <div>
             <Sparklines height={120} width={180} data={props.data}>
