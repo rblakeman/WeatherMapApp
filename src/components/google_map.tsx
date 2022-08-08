@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 
-class GoogleMap extends Component {
+type Props = {
+    lat: number;
+    lon: number;
+};
+
+export class GoogleMap extends Component<Props> {
     componentDidMount() {
+        // @ts-expect-error IGNORE
         new google.maps.Map(this.refs.map, {
             zoom: 12,
             center: {
@@ -94,6 +100,4 @@ class GoogleMap extends Component {
     render() {
         return <div ref="map" />;
     }
-}
-
-export default GoogleMap;
+};

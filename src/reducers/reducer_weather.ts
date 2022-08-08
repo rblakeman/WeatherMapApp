@@ -1,6 +1,13 @@
 import { FETCH_WEATHER } from '../actions/index';
 
-export default function(state = [], action) {
+type Action = {
+    type: string;
+    payload: {
+        data: number[]
+    }
+};
+
+export default function(state = [], action: Action) {
     switch (action.type) {
     case FETCH_WEATHER:
         //return state.concat([ action.payload.data ]);
