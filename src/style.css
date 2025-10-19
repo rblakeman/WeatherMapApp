@@ -1,8 +1,10 @@
 body {
     background-color: #222;
+    color: #eee;
 }
 
-td, th {
+td,
+th {
     vertical-align: middle !important;
     text-align: center !important;
 }
