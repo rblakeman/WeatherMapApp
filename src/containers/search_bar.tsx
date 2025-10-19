@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { bindActionCreators, type Dispatch } from 'redux';
 
 import { fetchWeather } from '../actions/index';
 
@@ -10,7 +10,6 @@ type Props = {
 type State = {
     term: string;
 };
-
 class SearchBar extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
@@ -21,8 +20,9 @@ class SearchBar extends Component<Props, State> {
         this.onFormSubmit = this.onFormSubmit.bind(this);
     }
 
-    onInputChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-        //console.log(event.target.value);
+    onInputChange(
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) {
         this.setState({ term: event.target.value });
     }
 
@@ -35,14 +35,19 @@ class SearchBar extends Component<Props, State> {
 
     render() {
         return (
-            <form className="input-group" onSubmit={this.onFormSubmit}>
+            <form
+                className='input-group'
+                onSubmit={this.onFormSubmit}>
                 <input
-                    placeholder="Enter Location for a five-day forecast"
-                    className="form-control"
+                    placeholder='Enter Location for a five-day forecast'
+                    className='form-control'
                     value={this.state.term}
-                    onChange={this.onInputChange} />
-                <span className="input-group-btn">
-                    <button type="submit" className="btn btn-primary">
+                    onChange={this.onInputChange}
+                />
+                <span className='input-group-btn'>
+                    <button
+                        type='submit'
+                        className='btn btn-primary'>
                         Submit
                     </button>
                 </span>
@@ -55,7 +60,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
     return bindActionCreators({ fetchWeather }, dispatch);
 }
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(SearchBar);
+export default connect(null, mapDispatchToProps)(SearchBar);

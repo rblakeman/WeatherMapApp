@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import _ from 'lodash';
+import { Component } from 'react';
+import { connect } from 'react-redux';
 
 import { Chart } from '../components/chart';
 import { GoogleMap } from '../components/google_map';
 
 type Weather = {
     city: {
-        coord: { lat: number, lon: number },
+        coord: { lat: number; lon: number };
         country: string;
         id: number;
         name: string;
@@ -15,11 +15,11 @@ type Weather = {
         sunrise: number;
         sunset: number;
         timezone: number;
-    },
+    };
     cnt: number;
     cod: string;
     list: {
-        clouds: { all: number; };
+        clouds: { all: number };
         dt: number;
         dt_txt: string;
         main: {
@@ -34,7 +34,7 @@ type Weather = {
             temp_min: number;
         };
         pop: number;
-        sys: { pod: string; };
+        sys: { pod: string };
         visibility: number;
         weather: {
             description: string;
@@ -48,36 +48,60 @@ type Weather = {
             gust: number;
         };
     }[];
-    message : number;
-}
-
-type Props = {
-    weather: Weather[]
+    message: number;
 };
 
+type Props = {
+    weather: Weather[];
+};
 class WeatherList extends Component<Props> {
-    renderWeather(cityData: Weather) {
-        const NAME = cityData.city.name;
-        const TEMPSk = cityData.list.map((weather) => weather.main.temp);
-        const TEMPSf = _.map(TEMPSk, (temp) => (temp * 9) / 5 - 459.67);
-        const HUMIDITY = cityData.list.map((weather) => weather.main.humidity);
-        const PRESSURE = cityData.list.map((weather) => weather.main.pressure);
+    renderWeather(cityData: Weather | undefined, idx: number) {
+        const NAME = cityData?.city.name;
+        const TEMPSk = cityData?.list.map((weather) => weather.main.temp) ?? [
+            0,
+        ];
+        const TEMPSf = _.map(TEMPSk, (temp) => (temp * 9) / 5 - 459.67) ?? [0];
+        const HUMIDITY = cityData?.list.map(
+            (weather) => weather.main.humidity,
+        ) ?? [0];
+        const PRESSURE = cityData?.list.map(
+            (weather) => weather.main.pressure,
+        ) ?? [0];
 
-        const { lat, lon  } = cityData.city.coord;
+        const { lat, lon } = cityData?.city.coord ?? { lat: 0, lon: 0 };
 
         return (
-            <tr key={NAME}>
+            <tr key={`${NAME}-${idx}`}>
                 <td>
-                    <GoogleMap lat={lat} lon={lon} />
+                    {NAME ? (
+                        <GoogleMap
+                            lat={lat}
+                            lon={lon}
+                        />
+                    ) : (
+                        <div>An Error Has Occurred</div>
+                    )}
                 </td>
                 <td>
-                    <Chart data={TEMPSf} color="red" units="ºF" />
+                    <Chart
+                        data={TEMPSf}
+                        color='red'
+                        units='ºF'
+                    />
                 </td>
                 <td>
-                    <Chart data={PRESSURE} color="green" units=" hPa" />
+                    <Chart
+                        data={PRESSURE}
+                        color='green'
+                        units=' hPa'
+                    />
                 </td>
                 <td>
-                    <Chart data={HUMIDITY} color="blue" units="%" />
+                    <Chart
+                        data={HUMIDITY}
+                        color='blue'
+                        units='%'
+                    />
                 </td>
             </tr>
         );
@@ -85,7 +109,7 @@ class WeatherList extends Component<Props> {
 
     render() {
         return (
-            <table className="table table-hover">
+            <table className='table table-hover'>
                 <thead>
                     <tr>
                         <th>City</th>
