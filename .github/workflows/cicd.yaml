@@ -125,9 +125,12 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build Site
-        # Run the build command for Vite
+      - name: Build Site with ENV
+        # Run the build command for Vite with secrets
         run: npm run build
+        env:
+          VITE_apiAccessKeyWeather: ${{ secrets.VITE_APIACCESSKEYWEATHER }}
+          VITE_apiAccessKeyMaps: ${{ secrets.VITE_APIACCESSKEYMAPS }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
